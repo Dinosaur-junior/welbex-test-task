@@ -1,0 +1,45 @@
+{% extends 'delivery/base.html' %}
+
+{% block title %}
+Админ панель
+{% endblock %}
+
+{% block body %}
+<br>
+
+<div class="container">
+    <h1>Главная страница</h1>
+    <br>
+    <div class="row row-cols-1 row-cols-md-2 mb-2 text-center">
+
+        <div class="card-desk mb-2 text-container">
+            <div class="col">
+                <div class="card mb-2 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                        <h4 class="card-title">Грузы</h4>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'cargo_main' %}" class="btn btn-outline-dark">Перейти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-desk mb-3 text-container">
+            <div class="col">
+                <div class="card mb-2 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                        <h4 class="card-title">Машины</h4>
+                    </div>
+                    <div class="card-body">
+                        <a href="/" class="btn btn-outline-dark">Перейти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

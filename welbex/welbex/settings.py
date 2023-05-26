@@ -69,6 +69,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'welbex.wsgi.application'
 
 

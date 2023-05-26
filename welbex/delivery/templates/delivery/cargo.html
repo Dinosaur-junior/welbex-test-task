@@ -1,0 +1,53 @@
+{% extends 'delivery/base.html' %}
+
+{% block title %}
+Админ панель
+{% endblock %}
+
+{% block body %}
+<br>
+
+<div class="container">
+    <a href="{% url 'delivery_main' %}" class="btn btn-lg btn-outline-dark">Главная страница</a>
+    <br><br>
+
+    <p align="left">
+        <button class="btn btn-outline-dark" type="button" data-toggle="collapse"
+                data-target="#add_cargo"
+                aria-expanded="false" aria-controls="restart">Добавить груз
+        </button>&nbsp;&nbsp;
+        <a class="btn btn-outline-dark" href="/">Выгрузить грузы в xlsx </a>
+    </p>
+
+    <div class="collapse" id="add_cargo">
+        <br>
+        <form method="post" enctype="multipart/form-data" action="/" class="form text-input">
+
+
+            <button type="submit" class="form-control btn-lg btn-outline-success">Добавить</button>
+        </form>
+        <br>
+    </div>
+
+
+    <table width="100%" style="border: 1px solid black; border-collapse: collapse; width:100%;" border="1"
+           id="sites"
+           class="sortable">
+        <tr>
+            <th onclick="sortTable(0)">ID груза</th>
+            <th>Pick-up</th>
+            <th>Delivery</th>
+            <th>Вес</th>
+            <th>Описание</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+
+        </tr>
+
+        {% for cargo in cargos %}
+
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
