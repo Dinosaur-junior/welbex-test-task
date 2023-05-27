@@ -1,8 +1,24 @@
+# -*- coding: utf-8 -*-
+# Written by Dinosaur
+#                __
+#               / _)
+#      _.----._/ /
+#     /         /
+#  __/ (  | (  |
+# /__.-'|_|--|_|
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# import libraries
 from django import forms
 
 from .models import Location, Cargo, Car
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# FORMS
+
+# Location form
 class LocationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,6 +43,8 @@ class LocationForm(forms.ModelForm):
                    }
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Cargo form
 class CargoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -50,6 +68,8 @@ class CargoForm(forms.ModelForm):
                    }
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Car form
 class CarForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -69,6 +89,8 @@ class CarForm(forms.ModelForm):
                    }
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Search form
 class SearchForm(forms.Form):
     object_type = forms.CharField(widget=forms.TextInput(attrs={'class': "form-control", 'required': True,
                                                                 'placeholder': "Объект", 'hidden': True}))

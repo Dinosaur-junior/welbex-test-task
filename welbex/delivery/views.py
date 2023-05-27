@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*-
+# Written by Dinosaur
+#                __
+#               / _)
+#      _.----._/ /
+#     /         /
+#  __/ (  | (  |
+# /__.-'|_|--|_|
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# import libraries
+
 import operator
 
 from django.contrib import messages
@@ -7,7 +20,8 @@ from .forms import LocationForm, CargoForm, CarForm, SearchForm
 from .models import Cargo, Location, Car, check_car_number
 
 
-# Create your views here.
+# ---------------------------------------------------------------------------------------------------------------------
+# pages
 
 # index page
 def index(request):
@@ -17,12 +31,16 @@ def index(request):
                                                        SearchForm(initial={'object_type': 'location'}), })
 
 
+# search for cargo/car/location
 def search(request):
     if request.method == 'GET':
         return redirect('/')
+
     elif request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
+
+            # search for cargo
             if form.data['object_type'] == 'cargo':
                 if form.data['query'].isdigit():
                     cargo_obj = Cargo.objects.filter(pk=int(form.data['query']))
@@ -39,9 +57,10 @@ def search(request):
                                'location_search_form':
                                    SearchForm(initial={'object_type': 'location'}), })
 
+            # search for car
             elif form.data['object_type'] == 'car':
                 if form.data['query'].isdigit():
-                    car_obj =Car.objects.filter(pk=int(form.data['query']))
+                    car_obj = Car.objects.filter(pk=int(form.data['query']))
                     if len(car_obj) == 0:
                         form.add_error(None, 'Машина с таким ID не найдена')
                     else:
@@ -58,11 +77,16 @@ def search(request):
                                'car_search_form': SearchForm(initial={'object_type': 'car'}),
                                'location_search_form': form, })
 
+            # search for location
             elif form.data['object_type'] == 'location':
                 if form.data['query'].isdigit():
                     location_obj = Location.objects.filter(postal_code=int(form.data['query']))
                     if len(location_obj) == 0:
-                        form.add_error(None, 'Локация с таким индексом не найдена')
+                        location_obj = Location.objects.filter(pk=int(form.data['query']))
+                        if len(location_obj) == 0:
+                            form.add_error(None, 'Локация с таким индексом не найдена')
+                        else:
+                            return redirect(f'/location_info/{location_obj[0].pk}')
                     else:
                         return redirect(f'/location_info/{location_obj[0].pk}')
 
@@ -72,6 +96,8 @@ def search(request):
                               {'cargo_search_form': SearchForm(initial={'object_type': 'cargo'}),
                                'car_search_form': SearchForm(initial={'object_type': 'car'}),
                                'location_search_form': form, })
+
+            # unknown object
             else:
                 messages.error(request, f'Несуществующий объект')
                 return redirect('/')
@@ -82,6 +108,10 @@ def search(request):
                                                        'location_search_form': form, })
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# CARGO
+
+# main cargo page
 def cargo(request):
     cargo_list = Cargo.objects.all()
     cargo_list = sorted(cargo_list, key=operator.attrgetter('pk'))
@@ -89,6 +119,7 @@ def cargo(request):
     return render(request, 'delivery/cargo.html', {'cargos': cargo_list, 'form': CargoForm})
 
 
+# add new cargo
 def new_cargo(request):
     form = CargoForm(request.POST)
     if form.is_valid():
@@ -108,18 +139,21 @@ def new_cargo(request):
         return render(request, 'delivery/cargo.html', {'cargos': cargo_list, 'form': form})
 
 
+# delete cargo by id
 def delete_cargo(request, cargo_id):
     loc = Cargo.objects.get(pk=cargo_id)
     loc.delete()
     return redirect('cargo_main')
 
 
+# get cargo by id
 def cargo_info(request, cargo_id):
     cargo_obj = Cargo.objects.get(pk=cargo_id)
     form = CargoForm(instance=cargo_obj)
     return render(request, 'delivery/cargo_page.html', {'cargo': cargo_obj, 'form': form})
 
 
+# edit cargo by id
 def edit_cargo(request, cargo_id):
     cargo_object = Cargo.objects.get(pk=cargo_id)
     if request.method == 'GET':
@@ -133,12 +167,17 @@ def edit_cargo(request, cargo_id):
         return render(request, 'admin_panel/cargo_page.html', {'form': form, 'cargo': cargo_object})
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# CARS
+
+# main cars page
 def cars(request):
     cars_list = Car.objects.all()
     cars_list = sorted(cars_list, key=operator.attrgetter('number'))
     return render(request, 'delivery/cars.html', {'cars': cars_list, 'form': CarForm})
 
 
+# add a new car
 def new_car(request):
     form = CarForm(request.POST)
     if form.is_valid():
@@ -170,18 +209,21 @@ def new_car(request):
         return render(request, 'delivery/cars.html', {'cars': cars_list, 'form': form})
 
 
+# delete car by id
 def delete_car(request, car_id):
     car = Car.objects.get(pk=car_id)
     car.delete()
     return redirect('cars_main')
 
 
+# get cars info by id
 def car_info(request, car_id):
     car_obj = Car.objects.get(pk=car_id)
     form = CarForm(instance=car_obj)
     return render(request, 'delivery/car_page.html', {'car': car_obj, 'form': form})
 
 
+# edit car by id
 def edit_car(request, car_id):
     car_object = Car.objects.get(pk=car_id)
     if request.method == 'GET':
@@ -195,12 +237,17 @@ def edit_car(request, car_id):
         return render(request, 'admin_panel/car_page.html', {'form': form, 'car': car_object})
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# LOCATIONS
+
+# main locations page
 def locations(request):
     location_list = Location.objects.all()
     location_list = sorted(location_list, key=operator.attrgetter('postal_code'))
     return render(request, 'delivery/locations.html', {'locations': location_list, 'form': LocationForm})
 
 
+# add a new location
 def new_location(request):
     form = LocationForm(request.POST)
     if form.is_valid():
@@ -212,18 +259,21 @@ def new_location(request):
         return render(request, 'delivery/locations.html', {'locations': location_list, 'form': form})
 
 
+# delete location by id
 def delete_location(request, location_id):
     loc = Location.objects.get(pk=location_id)
     loc.delete()
     return redirect('locations_main')
 
 
+# get locations info by id
 def location_info(request, location_id):
     location_obj = Location.objects.get(pk=location_id)
     form = LocationForm(instance=location_obj)
     return render(request, 'delivery/location_page.html', {'location': location_obj, 'form': form})
 
 
+# edit location by id
 def edit_location(request, location_id):
     location_object = Location.objects.get(pk=location_id)
     if request.method == 'GET':

@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*-
+# Written by Dinosaur
+#                __
+#               / _)
+#      _.----._/ /
+#     /         /
+#  __/ (  | (  |
+# /__.-'|_|--|_|
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# import libraries
+
 import re
 
 from django.core.exceptions import ValidationError
@@ -7,6 +20,10 @@ from django.urls import reverse
 from geopy.distance import geodesic
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# MODELS
+
+# Cargo model
 class Cargo(models.Model):
     pick_up_location = models.IntegerField(verbose_name='Pick-up')
     delivery_location = models.IntegerField(verbose_name='Delivery')
@@ -14,6 +31,7 @@ class Cargo(models.Model):
     description = models.TextField(verbose_name='Описание')
     objects = models.Manager()
 
+    # get distances to all cars
     def get_cars(self):
         cars = Car.objects.all()
         locs = [self.pick_up_location]
@@ -24,6 +42,7 @@ class Cargo(models.Model):
                      car.weight >= self.weight}
         return distances
 
+    # get beautiful print of distances to cars
     def get_cars_info(self):
         cars = Car.objects.all()
         cars = {i.pk: i.number for i in cars}
@@ -34,11 +53,13 @@ class Cargo(models.Model):
             info += f'{cars_info[i][0]}: {cars_info[i][1]}\n'
         return info
 
+    # get nearest cars
     def get_nearest_cars_amount(self):
         cars = self.get_cars()
         cars = {i: cars[i] for i in cars if cars[i] <= 450}
         return len(cars)
 
+    # absolute url
     def get_absolute_url(self):
         return reverse('cargo_info', kwargs={'cargo_id': self.pk})
 
@@ -47,15 +68,21 @@ class Cargo(models.Model):
         verbose_name_plural = 'Грузы'
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# CAR model
+
+# car number validator
 def car_number_validator(value):
     if not check_car_number(value):
         raise ValidationError(f"{value} - invalid car number")
 
 
+# checking for car number
 def check_car_number(value):
     return bool(re.match(r"[1000-9999]+[A-Z]", value))
 
 
+# Car model
 class Car(models.Model):
     number = models.CharField(unique=True, max_length=5, validators=[car_number_validator, ], verbose_name='Номер')
     location = models.IntegerField(verbose_name='Локация')
@@ -63,6 +90,7 @@ class Car(models.Model):
                                  validators=[MaxValueValidator(1000), MinValueValidator(1)])
     objects = models.Manager()
 
+    # absolute url
     def get_absolute_url(self):
         return reverse('car_info', kwargs={'car_id': self.pk})
 
@@ -71,6 +99,8 @@ class Car(models.Model):
         verbose_name_plural = 'Машины'
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# LOCATION model
 class Location(models.Model):
     city = models.CharField(max_length=255, verbose_name='Город')
     state = models.CharField(max_length=255, verbose_name='Штат')
@@ -79,6 +109,7 @@ class Location(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=6, verbose_name='Долгота')
     objects = models.Manager()
 
+    # absolute url
     def get_absolute_url(self):
         return reverse('location_info', kwargs={'location_id': self.pk})
 

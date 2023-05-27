@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
-# configuration file
+# Written by Dinosaur
+#                __
+#               / _)
+#      _.----._/ /
+#     /         /
+#  __/ (  | (  |
+# /__.-'|_|--|_|
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # import libraries
 import os
@@ -9,7 +17,7 @@ import sys
 # CONFIGURATION
 
 # DATABASE
-DATABASE_INFO = {'database': 'jangodb', 'host': 'dino-server', 'user': 'django',
+DATABASE_INFO = {'database': 'dino_djangodb', 'host': 'dino-server', 'user': 'django',
                  'password': 'postgres', 'port': 5432}
 
 # project path
