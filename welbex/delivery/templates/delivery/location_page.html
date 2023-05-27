@@ -1,0 +1,40 @@
+{% extends 'delivery/base.html' %}
+
+{% block title %}
+Локация {{location.pk}}
+{% endblock %}
+
+{% block body %}
+<br>
+
+<div class="container">
+    <a href="{% url 'locations_main' %}" class="btn btn-lg btn-outline-dark">К локациям</a>
+    <br><br>
+    <h1>Локация {{location.postal_code}}</h1>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'edit_location' location.pk %}" class="form text-input">
+
+        <div class="form-error">
+                {% for error in tg_file_users_id_form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {% endfor %}
+            </div>
+
+        <table align="center">
+        {% for f in form %}
+            <tr>
+                <td>{{f.label}}</td>
+        <td>{{f}}</td>
+                </tr>
+        {% endfor %}
+        </table>
+        <br>
+        <button type="submit" class="form-control btn-lg btn-outline-success">Изменить</button>
+    </form>
+
+
+</div>
+
+{% endblock %}

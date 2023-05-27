@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 
 from .forms import LocationForm, CargoForm, CarForm
 from .models import Cargo, Location, Car, check_car_number
-from geopy.distance import geodesic as GD
 
 
 # Create your views here.
@@ -15,7 +14,6 @@ def index(request):
 
 
 def cargo(request):
-    all_cars = Car.objects.all()
     cargo_list = Cargo.objects.all()
     cargo_list = sorted(cargo_list, key=operator.attrgetter('pk'))
 
@@ -45,6 +43,25 @@ def delete_cargo(request, cargo_id):
     loc = Cargo.objects.get(pk=cargo_id)
     loc.delete()
     return redirect('cargo_main')
+
+
+def cargo_info(request, cargo_id):
+    cargo_obj = Cargo.objects.get(pk=cargo_id)
+    form = CargoForm(instance=cargo_obj)
+    return render(request, 'delivery/cargo_page.html', {'cargo': cargo_obj, 'form': form})
+
+
+def edit_cargo(request, cargo_id):
+    cargo_object = Cargo.objects.get(pk=cargo_id)
+    if request.method == 'GET':
+        form = CargoForm(instance=cargo_object)
+        return render(request, 'admin_panel/cargo_page.html', {'form': form, 'cargo': cargo_object})
+    elif request.method == 'POST':
+        form = CargoForm(request.POST, instance=cargo_object)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/cargo_info/{cargo_id}')
+        return render(request, 'admin_panel/cargo_page.html', {'form': form, 'cargo': cargo_object})
 
 
 def cars(request):
@@ -90,6 +107,25 @@ def delete_car(request, car_id):
     return redirect('cars_main')
 
 
+def car_info(request, car_id):
+    car_obj = Car.objects.get(pk=car_id)
+    form = CarForm(instance=car_obj)
+    return render(request, 'delivery/car_page.html', {'car': car_obj, 'form': form})
+
+
+def edit_car(request, car_id):
+    car_object = Car.objects.get(pk=car_id)
+    if request.method == 'GET':
+        form = CarForm(instance=car_object)
+        return render(request, 'admin_panel/car_page.html', {'form': form, 'car': car_object})
+    elif request.method == 'POST':
+        form = CarForm(request.POST, instance=car_object)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/car_info/{car_id}')
+        return render(request, 'admin_panel/car_page.html', {'form': form, 'car': car_object})
+
+
 def locations(request):
     location_list = Location.objects.all()
     location_list = sorted(location_list, key=operator.attrgetter('postal_code'))
@@ -111,3 +147,22 @@ def delete_location(request, location_id):
     loc = Location.objects.get(pk=location_id)
     loc.delete()
     return redirect('locations_main')
+
+
+def location_info(request, location_id):
+    location_obj = Location.objects.get(pk=location_id)
+    form = LocationForm(instance=location_obj)
+    return render(request, 'delivery/location_page.html', {'location': location_obj, 'form': form})
+
+
+def edit_location(request, location_id):
+    location_object = Location.objects.get(pk=location_id)
+    if request.method == 'GET':
+        form = LocationForm(instance=location_object)
+        return render(request, 'admin_panel/location_page.html', {'form': form, 'location': location_object})
+    elif request.method == 'POST':
+        form = LocationForm(request.POST, instance=location_object)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/location_info/{location_id}')
+        return render(request, 'admin_panel/location_page.html', {'form': form, 'location': location_object})

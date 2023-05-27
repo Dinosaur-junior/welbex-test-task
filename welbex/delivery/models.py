@@ -3,6 +3,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.urls import reverse
 from geopy.distance import geodesic
 
 
@@ -12,10 +13,6 @@ class Cargo(models.Model):
     weight = models.IntegerField(verbose_name='Вес', validators=[MinValueValidator(1), MaxValueValidator(1000)])
     description = models.TextField(verbose_name='Описание')
     objects = models.Manager()
-
-    class Meta:
-        verbose_name = 'Груз'
-        verbose_name_plural = 'Грузы'
 
     def get_nearest_cars(self):
         cars = Car.objects.all()
@@ -27,8 +24,25 @@ class Cargo(models.Model):
                      car.weight >= self.weight}
         return distances
 
+    def get_nearest_cars_info(self):
+        cars = Car.objects.all()
+        cars = {i.pk: i.number for i in cars}
+        cars_info = self.get_nearest_cars()
+        cars_info = {i: [cars[i], f'{round(cars_info[i], 2)} миль'] for i in cars_info}
+        info = ''
+        for i in cars_info:
+            info += f'{cars_info[i][0]}: {cars_info[i][1]}\n'
+        return info
+
     def get_nearest_cars_amount(self):
         return len(self.get_nearest_cars())
+
+    def get_absolute_url(self):
+        return reverse('cargo_info', kwargs={'cargo_id': self.pk})
+
+    class Meta:
+        verbose_name = 'Груз'
+        verbose_name_plural = 'Грузы'
 
 
 def car_number_validator(value):
@@ -47,6 +61,9 @@ class Car(models.Model):
                                  validators=[MaxValueValidator(1000), MinValueValidator(1)])
     objects = models.Manager()
 
+    def get_absolute_url(self):
+        return reverse('car_info', kwargs={'car_id': self.pk})
+
     class Meta:
         verbose_name = 'Машина'
         verbose_name_plural = 'Машины'
@@ -59,6 +76,9 @@ class Location(models.Model):
     latitude = models.DecimalField(max_digits=10, decimal_places=6, verbose_name='Широта')
     longitude = models.DecimalField(max_digits=10, decimal_places=6, verbose_name='Долгота')
     objects = models.Manager()
+
+    def get_absolute_url(self):
+        return reverse('location_info', kwargs={'location_id': self.pk})
 
     class Meta:
         verbose_name = 'Локации'

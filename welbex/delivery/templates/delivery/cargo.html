@@ -57,7 +57,7 @@
 
         {% for cargo in cargos %}
         <tr>
-            <td>{{cargo.pk}}</td>
+            <td><a class="btn btn-outline-primary" href="{{cargo.get_absolute_url}}">{{cargo.pk}}</a></td>
             <td>{{cargo.pick_up_location}}</td>
             <td>{{cargo.delivery_location}}</td>
             <td>{{cargo.weight}}</td>

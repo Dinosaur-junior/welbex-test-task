@@ -55,7 +55,7 @@
 
         {% for car in cars %}
         <tr>
-            <td>{{car.pk}}</td>
+            <td><a class="btn btn-outline-primary" href="{{car.get_absolute_url}}">{{car.pk}}</a></td>
             <td>{{car.number}}</td>
             <td>{{car.location}}</td>
             <td>{{car.weight}}</td>

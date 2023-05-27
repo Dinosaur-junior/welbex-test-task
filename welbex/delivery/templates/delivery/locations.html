@@ -57,7 +57,7 @@
 
         {% for location in locations %}
         <tr>
-            <td>{{location.pk}}</td>
+            <td><a class="btn btn-outline-primary" href="{{location.get_absolute_url}}">{{location.pk}}</a></td>
             <td>{{location.postal_code}}</td>
             <td>{{location.city}}</td>
             <td>{{location.state}}</td>
