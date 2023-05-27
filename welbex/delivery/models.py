@@ -14,7 +14,7 @@ class Cargo(models.Model):
     description = models.TextField(verbose_name='Описание')
     objects = models.Manager()
 
-    def get_nearest_cars(self):
+    def get_cars(self):
         cars = Car.objects.all()
         locs = [self.pick_up_location]
         [locs.append(i.location) for i in cars]
@@ -24,10 +24,10 @@ class Cargo(models.Model):
                      car.weight >= self.weight}
         return distances
 
-    def get_nearest_cars_info(self):
+    def get_cars_info(self):
         cars = Car.objects.all()
         cars = {i.pk: i.number for i in cars}
-        cars_info = self.get_nearest_cars()
+        cars_info = self.get_cars()
         cars_info = {i: [cars[i], f'{round(cars_info[i], 2)} миль'] for i in cars_info}
         info = ''
         for i in cars_info:
@@ -35,7 +35,9 @@ class Cargo(models.Model):
         return info
 
     def get_nearest_cars_amount(self):
-        return len(self.get_nearest_cars())
+        cars = self.get_cars()
+        cars = {i: cars[i] for i in cars if cars[i] <= 450}
+        return len(cars)
 
     def get_absolute_url(self):
         return reverse('cargo_info', kwargs={'cargo_id': self.pk})

@@ -15,20 +15,20 @@
     <form method="post" enctype="multipart/form-data" action="{% url 'edit_car' car.pk %}" class="form text-input">
 
         <div class="form-error">
-                {% for error in tg_file_users_id_form.non_field_errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{error}}
-                </div>
-                {% endfor %}
+            {% for error in form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
             </div>
+            {% endfor %}
+        </div>
 
         <table align="center">
-        {% for f in form %}
+            {% for f in form %}
             <tr>
                 <td>{{f.label}}</td>
-        <td>{{f}}</td>
-                </tr>
-        {% endfor %}
+                <td>{{f}}</td>
+            </tr>
+            {% endfor %}
         </table>
         <br>
         <button type="submit" class="form-control btn-lg btn-outline-success">Изменить</button>

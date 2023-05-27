@@ -10,6 +10,30 @@
 <div class="container">
     <h1>Главная страница</h1>
     <br>
+    <div class="form-error">
+        {% for error in cargo_search_form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+    <div class="form-error">
+        {% for error in car_search_form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+    <div class="form-error">
+        {% for error in location_search_form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+        <br>
+        {% endfor %}
+    </div>
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
 
         <div class="card-desk mb-3 text-container">
@@ -20,6 +44,18 @@
                     </div>
                     <div class="card-body">
                         <a href="{% url 'cargo_main' %}" class="btn btn-outline-dark">Перейти</a>
+                        <form method="post" enctype="multipart/form-data" action="{% url 'search' %}"
+                              class="form text-input">
+                            {{cargo_search_form.object_type}}
+                            <table>
+                                <tr>
+                                    <td>{{cargo_search_form.query}}</td>
+                                    <td>
+                                        <button type="submit" class="form-control btn-outline-success">Поиск</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -33,6 +69,18 @@
                     </div>
                     <div class="card-body">
                         <a href="{% url 'cars_main' %}" class="btn btn-outline-dark">Перейти</a>
+                        <form method="post" enctype="multipart/form-data" action="{% url 'search' %}"
+                              class="form text-input">
+                            {{car_search_form.object_type}}
+                            <table>
+                                <tr>
+                                    <td>{{car_search_form.query}}</td>
+                                    <td>
+                                        <button type="submit" class="form-control btn-outline-success">Поиск</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -46,6 +94,18 @@
                     </div>
                     <div class="card-body">
                         <a href="{% url 'locations_main' %}" class="btn btn-outline-dark">Перейти</a>
+                        <form method="post" enctype="multipart/form-data" action="{% url 'search' %}"
+                              class="form text-input">
+                            {{location_search_form.object_type}}
+                            <table>
+                                <tr>
+                                    <td>{{location_search_form.query}}</td>
+                                    <td>
+                                        <button type="submit" class="form-control btn-outline-success">Поиск</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -67,3 +67,10 @@ class CarForm(forms.ModelForm):
                    'weight': forms.TextInput(attrs={'class': "form-control", 'placeholder': "Вес",
                                                     'type': 'number', 'min': 1, 'max': 1000}),
                    }
+
+
+class SearchForm(forms.Form):
+    object_type = forms.CharField(widget=forms.TextInput(attrs={'class': "form-control", 'required': True,
+                                                                'placeholder': "Объект", 'hidden': True}))
+    query = forms.CharField(widget=forms.TextInput(attrs={'class': "form-control", 'required': True,
+                                                          'placeholder': "Поиск"}))

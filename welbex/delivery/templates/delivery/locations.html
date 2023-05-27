@@ -16,7 +16,6 @@
                 data-target="#add_cargo"
                 aria-expanded="false" aria-controls="restart">Добавить локацию
         </button>&nbsp;&nbsp;
-        <a class="btn btn-outline-dark" href="/">Выгрузить локации в xlsx </a>
     </p>
 
     <div class="collapse" id="add_cargo">
@@ -45,8 +44,7 @@
            id="sites"
            class="sortable">
         <tr>
-            <th onclick="sortTable(0)">ID</th>
-            <th>Почтовый индекс</th>
+            <th onclick="sortTable(0)">Почтовый индекс</th>
             <th>Город</th>
             <th>Штат</th>
             <th>Широта</th>
@@ -57,8 +55,7 @@
 
         {% for location in locations %}
         <tr>
-            <td><a class="btn btn-outline-primary" href="{{location.get_absolute_url}}">{{location.pk}}</a></td>
-            <td>{{location.postal_code}}</td>
+            <td><a class="btn btn-outline-primary" href="{{location.get_absolute_url}}">{{location.postal_code}}</a></td>
             <td>{{location.city}}</td>
             <td>{{location.state}}</td>
             <td>{{location.latitude}}</td>

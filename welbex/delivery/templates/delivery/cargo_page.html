@@ -15,7 +15,7 @@
     <form method="post" enctype="multipart/form-data" action="{% url 'edit_cargo' cargo.pk %}" class="form text-input">
 
         <div class="form-error">
-            {% for error in tg_file_users_id_form.non_field_errors %}
+            {% for error in form.non_field_errors %}
             <div class="alert alert-danger" role="alert">
                 {{error}}
             </div>
@@ -30,9 +30,9 @@
             </tr>
             {% endfor %}
             <tr>
-                <td>Ближайшие машины</td>
-                <td>{{cargo.get_nearest_cars_info|linebreaks}}</td>
-            </tr>>
+                <td>Машины</td>
+                <td>{{cargo.get_cars_info|linebreaks}}</td>
+            </tr>
         </table>
         <br>
         <button type="submit" class="form-control btn-lg btn-outline-success">Изменить</button>

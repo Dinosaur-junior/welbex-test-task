@@ -3,3 +3,5 @@ pip==23.1.2
 psycopg2-binary==2.9.6
 psycopg2==2.9.6
 wheel==0.40.0
+geopy~=2.3.0
+folium~=0.14.0

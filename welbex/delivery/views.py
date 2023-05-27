@@ -1,8 +1,9 @@
 import operator
 
+from django.contrib import messages
 from django.shortcuts import render, redirect
 
-from .forms import LocationForm, CargoForm, CarForm
+from .forms import LocationForm, CargoForm, CarForm, SearchForm
 from .models import Cargo, Location, Car, check_car_number
 
 
@@ -10,7 +11,75 @@ from .models import Cargo, Location, Car, check_car_number
 
 # index page
 def index(request):
-    return render(request, 'delivery/index.html')
+    return render(request, 'delivery/index.html', {'cargo_search_form': SearchForm(initial={'object_type': 'cargo'}),
+                                                   'car_search_form': SearchForm(initial={'object_type': 'car'}),
+                                                   'location_search_form':
+                                                       SearchForm(initial={'object_type': 'location'}), })
+
+
+def search(request):
+    if request.method == 'GET':
+        return redirect('/')
+    elif request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            if form.data['object_type'] == 'cargo':
+                if form.data['query'].isdigit():
+                    cargo_obj = Cargo.objects.filter(pk=int(form.data['query']))
+                    if len(cargo_obj) == 0:
+                        form.add_error(None, 'Груз с таким ID не найден')
+                    else:
+                        return redirect(f'/cargo_info/{form.data["query"]}')
+
+                else:
+                    form.add_error(None, 'Вы ввели не число')
+                return render(request, 'delivery/index.html',
+                              {'cargo_search_form': form,
+                               'car_search_form': SearchForm(initial={'object_type': 'car'}),
+                               'location_search_form':
+                                   SearchForm(initial={'object_type': 'location'}), })
+
+            elif form.data['object_type'] == 'car':
+                if form.data['query'].isdigit():
+                    car_obj =Car.objects.filter(pk=int(form.data['query']))
+                    if len(car_obj) == 0:
+                        form.add_error(None, 'Машина с таким ID не найдена')
+                    else:
+                        return redirect(f'/car_info/{car_obj[0].pk}')
+
+                else:
+                    car_obj = Car.objects.filter(number=form.data['query'])
+                    if len(car_obj) == 0:
+                        form.add_error(None, 'Машина с таким номером не найдена')
+                    else:
+                        return redirect(f'/car_info/{car_obj[0].pk}')
+                return render(request, 'delivery/index.html',
+                              {'cargo_search_form': SearchForm(initial={'object_type': 'cargo'}),
+                               'car_search_form': SearchForm(initial={'object_type': 'car'}),
+                               'location_search_form': form, })
+
+            elif form.data['object_type'] == 'location':
+                if form.data['query'].isdigit():
+                    location_obj = Location.objects.filter(postal_code=int(form.data['query']))
+                    if len(location_obj) == 0:
+                        form.add_error(None, 'Локация с таким индексом не найдена')
+                    else:
+                        return redirect(f'/location_info/{location_obj[0].pk}')
+
+                else:
+                    form.add_error(None, 'Вы ввели не число')
+                return render(request, 'delivery/index.html',
+                              {'cargo_search_form': SearchForm(initial={'object_type': 'cargo'}),
+                               'car_search_form': SearchForm(initial={'object_type': 'car'}),
+                               'location_search_form': form, })
+            else:
+                messages.error(request, f'Несуществующий объект')
+                return redirect('/')
+        else:
+            form.add_error(None, 'Некорректный ввод')
+        return render(request, 'delivery/index.html', {'cargo_search_form': form,
+                                                       'car_search_form': form,
+                                                       'location_search_form': form, })
 
 
 def cargo(request):
