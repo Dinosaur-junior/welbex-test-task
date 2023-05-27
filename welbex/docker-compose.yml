@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
   web:
-    build: .
+    build: ./
     command: python manage.py runserver
     container_name: django_web
     volumes:
