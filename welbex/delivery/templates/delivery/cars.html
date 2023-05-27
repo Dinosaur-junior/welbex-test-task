@@ -14,14 +14,14 @@
     <p align="left">
         <button class="btn btn-outline-dark" type="button" data-toggle="collapse"
                 data-target="#add_cargo"
-                aria-expanded="false" aria-controls="restart">Добавить груз
+                aria-expanded="false" aria-controls="restart">Добавить машину
         </button>&nbsp;&nbsp;
-        <a class="btn btn-outline-dark" href="/">Выгрузить все грузы в xlsx </a>
+        <a class="btn btn-outline-dark" href="/">Выгрузить машины в xlsx </a>
     </p>
 
     <div class="collapse" id="add_cargo">
         <br>
-        <form method="post" enctype="multipart/form-data" action="{% url 'new_cargo' %}" class="form text-input">
+        <form method="post" enctype="multipart/form-data" action="{% url 'new_car' %}" class="form text-input">
 
             <div class="form-error">
                 {% for error in form.non_field_errors %}
@@ -46,25 +46,21 @@
            class="sortable">
         <tr>
             <th onclick="sortTable(0)">ID</th>
-            <th>Pick-up</th>
-            <th>Delivery</th>
-            <th>Вес</th>
-            <th>Описание</th>
-            <th>Кол-во ближайших машин</th>
+            <th>Номер</th>
+            <th>Локация</th>
+            <th>Грузоподъемность</th>
             <th>&nbsp;</th>
 
         </tr>
 
-        {% for cargo in cargos %}
+        {% for car in cars %}
         <tr>
-            <td>{{cargo.pk}}</td>
-            <td>{{cargo.pick_up_location}}</td>
-            <td>{{cargo.delivery_location}}</td>
-            <td>{{cargo.weight}}</td>
-            <td>{{cargo.description}}</td>
-            <td>{{cargo.get_nearest_cars_amount}} шт.</td>
+            <td>{{car.pk}}</td>
+            <td>{{car.number}}</td>
+            <td>{{car.location}}</td>
+            <td>{{car.weight}}</td>
             <td><button type="button" class="btn modalButton"
-                        data-name="{% url 'delete_cargo' cargo.pk %} {{cargo.pk}}" data-toggle="modal">🗑
+                        data-name="{% url 'delete_car' car.pk %} {{car.number}}" data-toggle="modal">🗑
                 </button></td>
         </tr>
 
@@ -77,7 +73,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Подтверждение удаления груза</h5>
+                    <h5 class="modal-title">Подтверждение удаления машины</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
@@ -128,7 +124,7 @@ $(document).ready(function(e) {
         var domain = ClickedButton.split(' ')[1];
         var url = ClickedButton.split(' ')[0];
 
-        $(".modal-body").html("<p>" + "Вы точно хотите удалить груз с ID =  " + domain + "?" + "</p>");
+        $(".modal-body").html("<p>" + "Вы точно хотите удалить машину с номером " + domain + "?" + "</p>");
         $("a.delete_button").attr("href", url)
         $('#myModal').modal('show');
     });
