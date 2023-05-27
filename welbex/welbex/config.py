@@ -17,7 +17,7 @@ import sys
 # CONFIGURATION
 
 # DATABASE
-DATABASE_INFO = {'database': 'dino_djangodb', 'host': 'dino-server', 'user': 'django',
+DATABASE_INFO = {'database': 'dino_django_db', 'host': 'dino-server', 'user': 'django',
                  'password': 'postgres', 'port': 5432}
 
 # project path
