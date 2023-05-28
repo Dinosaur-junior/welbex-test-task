@@ -14,7 +14,7 @@ services:
       - "5432:5432"
   web:
     build: ./
-    command: python manage.py runserver
+    command: python manage.py runserver 0.0.0.0:8000
     container_name: django_web
     volumes:
       - .:/dino
@@ -25,8 +25,5 @@ services:
   app:
     build: ./
     command: python cars_movement.py
-    container_name: cars
     volumes:
       - .:/dino
-    depends_on:
-      - db
