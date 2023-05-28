@@ -37,7 +37,7 @@ print(resp.json())
 Ответ:
 
 ```json
-{'2': {'pick-up': 610, 'delivery': 611, 'wight': 1, 'description': 'gaefgeafg', 'nearest_cars': {'2': 11.416862577989889}}, 'status': 'success', 'errors': []}
+{"2": {"pick-up": 610, "delivery": 611, "wight": 1, "description": "text", "nearest_cars": {"2": 11.416862577989889}}, "status": "success", "errors": []}
 ```
 
 Пример отправки данных (добавление груза):
@@ -55,8 +55,8 @@ print(resp.json())
 Ответ:
 ```json
 {
-  'status': 'success',
-  'errors': []
+  "status": "success",
+  "errors": []
 }
 ```
 
