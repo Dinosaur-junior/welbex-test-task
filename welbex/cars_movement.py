@@ -51,7 +51,7 @@ class CarsMovement(Thread):
 
             except Exception as e:
                 print(e)
-            time.sleep(180)
+            time.sleep(5)
 
 
 # ---------------------------------------------------------------------------------------------------------------------

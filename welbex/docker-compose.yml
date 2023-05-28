@@ -22,3 +22,11 @@ services:
       - "8000:8000"
     depends_on:
       - db
+  app:
+    build: ./
+    command: python cars_movement.py
+    container_name: cars
+    volumes:
+      - .:/dino
+    depends_on:
+      - db
